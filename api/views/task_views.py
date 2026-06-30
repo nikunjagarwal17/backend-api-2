@@ -29,7 +29,7 @@ class TaskListView(View):
             return JsonResponse({'error': 'title is required.'}, status=400)
 
         task = Task.objects.create(title=title)
-        return JsonResponse(task_to_dict(task), status=201)
+        return JsonResponse(task_to_dict(task), status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
