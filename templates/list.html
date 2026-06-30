@@ -1,0 +1,9 @@
+{% extends "common.html" %}
+
+{% block content %}
+<ul>
+  {% for task in tasks %}
+  <li><span>{{ task.title }}</span></li>
+  {% endfor %}
+</ul>
+{% endblock %}
