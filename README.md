@@ -118,3 +118,80 @@ Response `200`:
 ```json
 {"error": "Invalid JSON."}
 ```
+
+---
+
+## Step 2 — Task List Page
+
+URL: `/tasks`
+
+Renders an HTML page listing all tasks using Django's template inheritance.
+
+- `templates/common.html` defines the shared header and footer
+- `templates/list.html` extends it via `{% extends "common.html" %}` and fills `{% block content %}`
+- Task titles are output with `{{ task.title }}` — Django auto-escapes HTML, so a title like `<script>alert(1)</script>` renders as plain text and is never executed
+
+---
+
+## Step 3 — User Search
+
+### POST /api/users/search
+
+Search users with dynamic AND conditions. All fields are optional. Omitting all fields returns every user.
+
+**Request body:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| name | string | Partial, case-insensitive match on name |
+| email | string | Partial, case-insensitive match on email |
+| minAge | integer | Age >= minAge |
+| maxAge | integer | Age <= maxAge |
+
+**Response `200`** — list of matching users with their orders:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Emma Davis",
+    "email": "emma@example.com",
+    "age": 29,
+    "orders": [
+      {"id": 3, "itemName": "Notebook"}
+    ]
+  }
+]
+```
+
+No matches returns `200` with `[]`.
+
+### Examples
+
+**Search by name (partial match):**
+```bash
+curl -X POST http://localhost:8000/api/users/search \
+  -H "Content-Type: application/json" \
+  -d '{"name": "son"}'
+```
+
+**Search by age range:**
+```bash
+curl -X POST http://localhost:8000/api/users/search \
+  -H "Content-Type: application/json" \
+  -d '{"minAge": 20, "maxAge": 30}'
+```
+
+**Combined conditions (AND):**
+```bash
+curl -X POST http://localhost:8000/api/users/search \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Emma", "minAge": 29}'
+```
+
+**Return all users (no conditions):**
+```bash
+curl -X POST http://localhost:8000/api/users/search \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
