@@ -43,8 +43,7 @@ class UserSearchView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class UserOrdersView(View):
     def get(self, request):
-        # TODO: Step4 - The implementation below has an N+1 problem. Resolve it using prefetch_related
-        users = User.objects.all()
+        users = User.objects.prefetch_related('orders').all()
         result = []
         for user in users:
             orders = [{'id': o.id, 'itemName': o.item_name} for o in user.orders.all()]
