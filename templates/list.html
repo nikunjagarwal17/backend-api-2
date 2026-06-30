@@ -1,13 +1,9 @@
-{# TODO: Step2 - Implement following these steps:                            #}
-{#   1. Extend common.html ({% extends "common.html" %})                     #}
-{#   2. Implement the task list inside {% block content %}...{% endblock %}   #}
-{#                                                                           #}
-{# DOM structure of the task list:                                           #}
-{#   <ul>                                                                     #}
-{#     <li><span>{{ task.title }}</span></li>  <- repeat for each task        #}
-{#   </ul>                                                                    #}
-<!DOCTYPE html>
-<html>
-<body>
-</body>
-</html>
+{% extends "common.html" %}
+
+{% block content %}
+<ul>
+  {% for task in tasks %}
+  <li><span>{{ task.title }}</span></li>
+  {% endfor %}
+</ul>
+{% endblock %}
